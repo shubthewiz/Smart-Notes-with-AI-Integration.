@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NMIT MCA Note Sharing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+ <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js"></script>
+
+
+
+
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    }
+
+    /* Navbar */
+ header {
+  background: linear-gradient(135deg, #020617, #1e3a8a, #312e81);
+  color: white;
+  padding: 18px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+}
+
+/* Links Style */
+header a {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 10px 20px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 0 0 rgba(255,255,255,0);
+}
+
+/* Glow Hover Effect */
+header a:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 0 25px rgba(255,255,255,0.6);
+}
+
+    /* Video Hero Section */
+.video-hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Background Video */
+.bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* Overlay */
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: -1;
+}
+
+/* Hero Content */
+.hero-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  z-index: 2;
+  animation: fadeUpHero 1s ease;
+}
+
+@keyframes fadeUpHero {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Text Styles */
+.hero-title {
+  font-size: 44px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.typing-text {
+  font-size: 36px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid white;
+  width: 0;
+  animation: typing 4s steps(50, end) forwards, blink .7s infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+.hero-subtext {
+  font-size: 18px;
+  margin-top: 20px;
+  opacity: 0.9;
+}
+
+.hero-btn {
+  margin-top: 20px;              /* ✅ Safe spacing */
+  padding: 16px 40px;            /* ✅ Better click area */
+  border-radius: 50px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+
+  display: inline-block;         /* ✅ Stops overlap issues */
+  position: relative;
+  z-index: 10;                    /* ✅ Keep above video */
+
+  transition: all 0.3s ease;
+}
+
+.hero-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(34,197,94,0.6);
+}
+
+
+
+/* ================================
+   NOTES SECTION - FULL CSS
+================================ */
+
+/* Section Background */
+.notes-section {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f8fafc, #e0e7ff, #eef2ff);
+  background-size: 200% 200%;
+  animation: softMove 12s ease infinite;
+}
+
+@keyframes softMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Section Headings */
+.notes-title {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+.notes-subtitle {
+  text-align: center;
+  font-size: 16px;
+  color: #64748b;
+  margin-bottom: 50px;
+}
+
+/* Grid Layout */
+.notes-grid {
+  max-width: 1250px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+/* Note Card */
+.note-card {
+  background: white;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.note-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+}
+
+/* Image Styling */
+.note-img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  background: #f1f5f9;
+}
+
+/* Note Body (Text Area) */
+.note-body {
+  padding: 22px;
+  color: #0f172a;
+  background: white;
+}
+
+.note-body h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.note-body p {
+  font-size: 14px;
+  color: #475569;
+  margin: 4px 0;
+}
+
+/* Buttons Area */
+.btn-group {
+  padding: 10px 20px 24px;
+  display: flex;
+  gap: 12px;
+}
+
+/* Buttons */
+.btn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.btn:hover {
+  transform: scale(1.07);
+  box-shadow: 0 10px 30px rgba(37,99,235,0.4);
+}
+
+/* Trending Badge */
+.trending {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: linear-gradient(45deg, #fb7185, #ef4444);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 0 20px rgba(239,68,68,0.5);
+  animation: pulseBadge 1.5s infinite;
+}
+
+@keyframes pulseBadge {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+
+    /* Developer Section Enhanced */
+.dev-section {
+  background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.dev-section h2 {
+  font-size: 32px;
+  margin-bottom: 40px;
+  color: #0f172a;
+  letter-spacing: 1px;
+  animation: fadeTitle 1s ease-in-out;
+}
+
+@keyframes fadeTitle {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  display: inline-block;
+  padding: 30px 25px;
+  border-radius: 24px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  margin: 15px;
+  width: 260px;
+  transition: all 0.4s ease;
+  animation: cardFloat 4s infinite ease-in-out, cardEnter 0.8s ease forwards;
+}
+
+@keyframes cardEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.profile-card:hover {
+  transform: translateY(-15px) scale(1.05);
+  box-shadow: 0 25px 60px rgba(99,102,241,0.4);
+  background: white;
+}
+
+.profile-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 4px solid #6366f1;
+  transition: transform 0.4s ease;
+}
+
+.profile-card:hover img {
+  transform: rotate(5deg) scale(1.05);
+}
+
+.profile-card h3 {
+  font-size: 20px;
+  color: #0f172a;
+  margin-bottom: 5px;
+}
+
+.profile-card p {
+  font-size: 14px;
+  color: #475569;
+}
+
+    /* Footer */
+    footer {
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+
+   /* Widget Position */
+#ai-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+/* Floating Button */
+#ai-button {
+  width: 65px;
+  height: 65px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  font-size: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 0 20px rgba(79,70,229,0.6);
+  animation: floatBot 3s ease-in-out infinite;
+}
+
+/* Glow */
+.ai-glow {
+  position: absolute;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: rgba(99,102,241,0.6);
+  filter: blur(10px);
+  animation: pulseGlow 1.5s infinite;
+  z-index: -1;
+}
+
+/* Chat Box icon*/
+/* Floating Button */
+#ai-button {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 0 25px rgba(99,102,241,0.6);
+  
+  /* Floating Animation */
+  animation: floatUpDown 3s ease-in-out infinite;
+}
+
+/* AI Glow Pulse */
+.ai-glow {
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  background: rgba(99,102,241,0.6);
+  border-radius: 50%;
+  filter: blur(12px);
+  animation: glowingPulse 1.8s ease-in-out infinite;
+  z-index: -1;
+}
+
+/* Bot Icon */
+.bot-icon {
+  font-size: 30px;
+  color: white;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Smooth Up & Down Floating Animation */
+@keyframes floatUpDown {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+/* Glowing Pulse Animation */
+@keyframes glowingPulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.25); opacity: 0.35; }
+  100% { transform: scale(1); opacity: 0.7; }
+}
+
+/* Chat Box */
+#ai-chatbox {
+  width: 360px;
+  height: 480px;
+  bottom: 90px;
+  right: 20px;
+  display: none;
+  position: fixed;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+}
+
+/* Maximize */
+#ai-chatbox.maximized {
+  width: 80vw;
+  height: 80vh;
+  bottom: 10vh;
+  right: 10vw;
+}
+
+/* Header */
+.ai-header {
+  background: #4f46e5;
+  color: white;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Header Buttons */
+.ai-header button {
+  background: rgba(255,255,255,0.18);
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.ai-header button:hover {
+  background: rgba(255,255,255,0.35);
+}
+
+/* Messages Area */
+.ai-messages {
+  height: calc(100% - 140px);
+  padding: 14px;
+  overflow-y: auto;
+}
+
+/* User & AI Messages */
+.user-msg, .ai-msg {
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin: 6px 0;
+  animation: fadeIn 0.3s ease;
+  font-size: 14px;
+}
+
+.user-msg {
+  background: #e0e7ff;
+  text-align: right;
+}
+
+.ai-msg {
+  background: #f3f4f6;
+  color: #4f46e5;
+}
+
+/* Input Area */
+.ai-input-area {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.ai-input-area input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  font-size: 15px;
+}
+
+.ai-input-area input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 5px rgba(79,70,229,0.3);
+}
+
+/* Send Button */
+.ai-input-area button {
+  margin-left: 10px;
+  padding: 12px 18px;
+  background: #4f46e5;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.2s ease;
+}
+
+.ai-input-area button:hover {
+  background: #4338ca;
+}
+
+/* Typing Animation */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 8px 0;
+}
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background: #4f46e5;
+  border-radius: 50%;
+  animation: blink 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s }
+.typing-dot:nth-child(3) { animation-delay: 0.4s }
+
+@keyframes blink {
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Stats Section Background */
+.stats-section {
+  padding: 100px 20px;
+  background: linear-gradient(135deg, #020617, #0f172a, #1e293b);
+  background-size: 200% 200%;
+  animation: bgShift 10s ease infinite;
+  text-align: center;
+}
+
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+/* ⭐ Rating Stars Style */
+.stars {
+  display: flex;
+  gap: 6px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.star {
+  font-size: 20px;
+  color: #94a3b8; /* gray by default */
+  transition: 0.2s ease;
+}
+
+/* Hover effect */
+.star:hover,
+.star.hovered {
+  color: #facc15; /* yellow */
+}
+
+/* Clicked (selected) stars */
+.star.selected {
+  color: #facc15;
+}
+
+
+/* Title */
+.stats-title {
+  font-size: 40px;
+  color: #ffffff;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 30px rgba(99,102,241,0.7);
+}
+
+.stats-subtitle {
+  font-size: 16px;
+  color: #cbd5f5;
+  margin-bottom: 50px;
+}
+
+/* Grid */
+.stats-grid {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 28px;
+}
+
+/* Cards */
+.stats-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 40px 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glow border on hover */
+.stats-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: linear-gradient(135deg, transparent, rgba(99,102,241,0.4), transparent);
+  opacity: 0;
+  transition: 0.4s ease;
+}
+
+.stats-card:hover::before {
+  opacity: 1;
+}
+
+.stats-card:hover {
+  transform: translateY(-14px) scale(1.04);
+  box-shadow: 0 0 80px rgba(99,102,241,0.6);
+}
+
+/* Icons */
+.stats-icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+/* Counters */
+.stats-card h3 {
+  font-size: 38px;
+  font-weight: bold;
+  color: #a5b4fc;
+  text-shadow: 0 0 20px rgba(165,180,252,0.5);
+}
+
+.stats-card p {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #e2e8f0;
+}
+
+/* ✅ Hero Layout */
+.hero-content-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  max-width: 1300px;
+  margin: auto;
+  padding: 0 40px;
+  z-index: 2;
+}
+
+/* ✅ Center Text Block */
+.hero-text-box {
+  flex: 1;
+  text-align: center;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;   /* ✅ Controls spacing between items */
+  padding: 0 20px;
+}
+
+
+/* ✅ Left-Side Game Leaderboard */
+#live-leaderboard {
+  width: 300px;
+  margin-right: 30px;
+  background: rgba(2, 6, 23, 0.6);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  box-shadow: 0 0 40px rgba(99,102,241,0.6);
+  overflow: hidden;
+}
+
+/* ✅ Leaderboard Header */
+.leaderboard-header {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  padding: 16px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+  color: white;
+}
+
+/* ✅ Rows */
+.leader-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: white;
+}
+
+/* ✅ Rank */
+.rank {
+  font-weight: bold;
+  color: #facc15;
+  width: 40px;
+}
+
+/* ✅ User Info */
+.user-info h4 {
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.user-info p {
+  font-size: 12px;
+  color: #c7d2fe;
+}
+
+/* ✅ Scrollable list */
+#leaderboard-list {
+  max-height: 320px;
+  overflow-y: auto;
+}
+/* Tablet View */
+@media (max-width: 1024px) {
+  header {
+    padding: 15px 25px;
+  }
+
+  .hero-content-wrapper {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  #live-leaderboard {
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+
+  .hero-title {
+    font-size: 34px;
+  }
+
+  .typing-text {
+    font-size: 26px;
+    text-align: center;
+  }
+
+  .notes-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+
+  /* Navbar */
+  header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  header div {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  header a {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  /* Hero Section */
+  .video-hero {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .hero-title {
+    font-size: 26px;
+  }
+
+  .typing-text {
+    font-size: 20px;
+    white-space: normal;
+    border-right: none;
+  }
+
+  .hero-subtext {
+    font-size: 14px;
+  }
+
+  .hero-btn {
+    font-size: 14px;
+    padding: 12px 25px;
+  }
+
+  /* Notes */
+  .notes-title {
+    font-size: 26px;
+  }
+
+  .notes-subtitle {
+    font-size: 14px;
+  }
+
+  .note-img {
+    height: 220px;
+  }
+
+  /* Developer Cards */
+  .profile-card {
+    width: 100%;
+    max-width: 320px;
+    margin: 10px auto;
+  }
+
+  /* Stats */
+  .stats-title {
+    font-size: 28px;
+  }
+
+  .stats-card h3 {
+    font-size: 28px;
+  }
+
+  /* AI Widget */
+  #ai-chatbox {
+    width: 90%;
+  }
+}
+
+/* Extra Small Screens */
+@media (max-width: 400px) {
+  .typing-text {
+    font-size: 16px;
+  }
+
+  .hero-title {
+    font-size: 22px;
+  }
+}
+/* Hamburger Menu */
+.menu-toggle {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Mobile Navbar */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    background: rgba(2, 6, 23, 0.95);
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+}
+
+.menu-toggle {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block !important;
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    z-index: 10000;
+  }
+}/* Force header always on top */
+header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999999 !important;
+}
+
+/* Fix hamburger icon */
+.menu-toggle {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: white;
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  z-index: 9999999 !important;
+}
+
+/* Mobile only */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block !important;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background: #020617;
+    width: 100%;
+    margin-top: 60px;
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  body {
+    padding-top: 80px;   /* Prevent content hide under fixed header */
+  }
+  #ai-chatbox {
+  width: 350px;
+  height: 450px;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: none;
+}
+
+#ai-chatbox.maximized {
+  width: 90vw;
+  height: 80vh;
+  right: 5vw;
+  bottom: 10vh;
+  border-radius: 20px;
+}
+
+.ai-header {
+  background: #4f46e5;
+  color: white;
+  padding: 10px 15px;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#maximize-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+}
+
+
+
+
+
+
+
+  </style>
+</head>
+
+<body>
+
+<!-- ✅ NAVBAR -->
+<header>
+  <h2>🧠 NMIT Smart Notes</h2>
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+  <div class="nav-links">
+
+    <% if(user) { %>
+      <span style="color:#e0e7ff;font-size:14px;">
+        👋 Hi, <b><%= user.name %></b>
+      </span>
+      <a href="/my-codes">💾 My Codes</a>
+      <a href="/playground">💻 Code Playground</a>
+
+
+
+      <a href="/notes">Notes</a>      <!-- ✅ NEW BUTTON -->
+
+      <a href="/upload">Upload</a>
+
+      <a href="/logout" style="background:#ef4444;">
+        Logout
+      </a>
+
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    <% } %>
+
+  </div>
+</header>
+
+
+<!-- ✅ HERO SECTION -->
+<section class="video-hero">
+
+  <!-- Background Video -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="/videos/5536728-uhd_3840_2160_25fps.mp4" type="video/mp4">
+    Your browser does not support video.
+  </video>
+
+  <!-- Dark Overlay -->
+  <div class="video-overlay"></div>
+
+  <!-- ✅ HERO FLEX WRAPPER -->
+  <div class="hero-content-wrapper">
+
+    <!-- 🏆 LEFT SIDE GAME-STYLE LEADERBOARD -->
+    <div id="live-leaderboard">
+
+      <div class="leaderboard-header">
+        🏆 Top Contributors
+      </div>
+
+      <div id="leaderboard-list">
+        <% leaderboard.forEach((user, index) => { %>
+          <div class="leader-row">
+            <span class="rank">#<%= index + 1 %></span>
+            <div class="user-info">
+              <h4>👤 <%= user._id %></h4>
+              <p>⬇ <%= user.totalDownloads %> downloads</p>
+              <p>⭐ <%= user.avgRating ? user.avgRating.toFixed(1) : "0.0" %></p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+    </div>
+
+    <!-- ✅ CENTER HERO TEXT -->
+    <div class="hero-text-box">
+      <h1 class="hero-title">Welcome to</h1>
+
+      <h2 class="typing-text">
+        NMIT MCA NOTE SHARING AND DOWNLOADING ZONE
+      </h2>
+
+      <p class="hero-subtext">
+        Share knowledge. Learn better. Download smarter.
+      </p>
+
+      <a href="#notes-grid" class="hero-btn">Explore Notes</a>
+    </div>
+
+  </div>
+</section>
+
+
+
+<!-- ✅ NOTES SECTION -->
+<!-- ✅ NOTES SECTION -->
+<section class="notes-section" id="notes-grid">
+
+<h2 class="notes-title">
+  <span id="typed-title"></span>
+</h2>
+
+<p class="notes-subtitle">
+  <span id="typed-subtitle"></span>
+</p>
+<h2 style="text-align:center;margin-bottom:20px;">
+  🔥 Top Rated Notes
+</h2>
+
+
+
+  <div class="notes-grid">
+
+    <% notes.forEach(note => { %>
+      <div class="note-card" data-uploader-id="<%= note.uploadedById || '' %>">
+
+
+
+        <% if(note.rating >= 4.5) { %>
+          <div class="trending">🔥 Trending</div>
+        <% } %>
+
+        <img class="note-img" src="/uploads/<%= note.coverImage %>">
+
+        <div class="note-body">
+          <h3><%= note.title %></h3>
+          <p>Subject: <%= note.subject %></p>
+          <p>By: <b><%= note.uploadedBy %></b></p>
+          <p>⭐ <span class="rating-value"><%= note.rating.toFixed(1) %></span> / 5</p>
+<p>👥 <span class="rating-count"><%= note.ratingCount %></span> people rated</p>
+
+          <div class="stars" data-id="<%= note._id %>">
+  <% for(let i = 1; i <= 5; i++) { %>
+    <span class="star">★</span>
+  <% } %>
+</div>
+
+        </div>
+
+        <div class="btn-group">
+          <a class="btn" href="/view/<%= note._id %>" target="_blank">View</a>
+          <a class="btn" href="/download/<%= note._id %>">Download</a>
+        </div>
+
+      </div>
+    <% }) %>
+
+  </div>
+  <% if(user) { %>
+  <div style="text-align:center; margin:40px 0;">
+    <a href="/notes" style="
+      display:inline-block;
+      padding:14px 30px;
+      background:linear-gradient(135deg,#2563eb,#1d4ed8);
+      color:white;
+      font-weight:600;
+      border-radius:30px;
+      text-decoration:none;
+      font-size:15px;
+      box-shadow:0 10px 30px rgba(37,99,235,0.5);
+    ">
+      📚 View All Notes
+    </a>
+  </div>
+<% } else { %>
+  <div style="text-align:center; margin:40px 0; color:#475569;">
+    <p style="font-size:15px;">
+      🔒 Please login to view all notes
+    </p>
+  </div>
+<% } %>
+
+</section>
+
+<!-- ✅ PLATFORM INSIGHTS SECTION -->
+<section class="stats-section">
+  <h2 class="stats-title">📊 Platform Insights</h2>
+  <p class="stats-subtitle">Our growing academic community in numbers</p>
+
+  <div class="stats-grid">
+    <div class="stats-card">
+      <div class="stats-icon">📚</div>
+      <h3 class="counter" data-target="250">0</h3>
+      <p>Notes Shared</p>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-icon">👨‍🎓</div>
+      <h3 class="counter" data-target="500">0</h3>
+      <p>Active Students</p>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-icon">⬇️</div>
+      <h3 class="counter" data-target="1200">0</h3>
+      <p>Total Downloads</p>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-icon">⭐</div>
+      <h3 class="counter" data-target="4.8">0</h3>
+      <p>Average Rating</p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ✅ DEVELOPER SECTION -->
+<div class="dev-section">
+  <h2>Developed By</h2>
+
+  <div class="profile-card">
+    <img src="/images/shoaibprofile.jpg">
+    <h3>MD Shoaib Akhter</h3>
+    <p>Backend Engineer & QA Engineer</p>
+  </div>
+  <div class="profile-card">
+    <img src="/images/sujata.jpeg">
+    <h3>Sujata Shirurmath</h3>
+    <p>Database Engineer</p>
+  </div>
+  <div class="profile-card">
+    <img src="/images/Shubham photo_page-0001.jpg">
+    <h3>Shubham</h3>
+    <p>Frontend Enigineer</p>
+  </div>
+
+  <h2>Guided By</h2>
+  <div class="profile-card">
+  
+    <img src="/images/sashikant sir.jpg">
+    <h3>Dr. Sashikanth Reddy Avula</h3>
+    <p>Associate Professor,NMIT-MCA</p>
+  </div>
+</div>
+
+<!-- ✅ FOOTER -->
+<footer>
+  © 2025 NMIT MCA Notes | Designed by MD Shoaib Akhter, Sujata Shirurmath, Shubham | Guided by Dr. Sashikanth Reddy Avula
+</footer>
+<!-- ✅ AI CHAT WIDGET -->
+<div id="ai-widget">
+
+  <!-- Floating Button -->
+  <div id="ai-button" onclick="toggleChat()">
+    <div class="ai-glow"></div>
+    <span class="bot-icon">🤖</span>
+</div>
+
+
+  <!-- Chat Box -->
+  <div id="ai-chatbox">
+    <div class="ai-header">
+      <button id="maximize-btn" onclick="toggleMaximize()">⛶</button>
+      <button onclick="toggleChat()">✖</button>
+    </div>
+
+    <div id="chat-messages" class="ai-messages"></div>
+
+    <div class="ai-input-area">
+      <input id="user-input" type="text" placeholder="Type your message...">
+      <button onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+</div>
+
+
+<audio id="typing-sound" src="/sounds/typing.mp3"></audio>
+
+
+<script>
+//rating 
+document.querySelectorAll(".note-card").forEach(card => {
+  const starsBox = card.querySelector(".stars");
+  const stars = starsBox?.querySelectorAll(".star");
+  const uploaderId = card.dataset.uploaderId;
+  const currentUserId = "<%= user ? user._id : '' %>";
+
+  if (!stars || uploaderId === currentUserId) {
+    if (starsBox) starsBox.style.display = "none";
+    return;
+  }
+
+  stars.forEach((star, index) => {
+    star.addEventListener("click", async () => {
+      const noteId = starsBox.dataset.id;
+      const rating = index + 1;
+
+      const res = await fetch(`/rate/${noteId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating })
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        return alert(data.message);
+      }
+
+      // ✅ Update UI instantly
+      const ratingText = card.querySelector(".rating-value");
+      const countText = card.querySelector(".rating-count");
+
+      if (ratingText) ratingText.textContent = data.rating;
+      if (countText) countText.textContent = data.ratingCount;
+
+      // ✅ Lock stars after voting
+      stars.forEach(s => s.style.pointerEvents = "none");
+    });
+  });
+});
+
+
+//ai logic
+ let greeted = false;
+
+function toggleChat() {
+  const box = document.getElementById("ai-chatbox");
+  const chat = document.getElementById("chat-messages");
+
+  if (box.style.display === "none" || box.style.display === "") {
+    box.style.display = "block";
+
+    if (!greeted) {
+      chat.innerHTML += `<div class="ai-msg">🤖 Hi! How may I assist you?</div>`;
+      greeted = true;
+    }
+  } else {
+    box.style.display = "none";
+  }
+}
+
+async function sendMessage() {
+  const input = document.getElementById("user-input");
+  const chat = document.getElementById("chat-messages");
+  const typingSound = document.getElementById("typing-sound");
+
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  chat.innerHTML += `<div class="user-msg"><b>You:</b> ${msg}</div>`;
+  input.value = "";
+
+  // Typing animation
+  const typingHTML = `
+    <div id="typing" class="typing-indicator">
+      <span style="color:#4f46e5;">AI is typing</span>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  `;
+  chat.innerHTML += typingHTML;
+  chat.scrollTop = chat.scrollHeight;
+
+  // Play typing sound
+  typingSound.loop = true;
+  typingSound.play();
+
+  try {
+    const res = await fetch("/ask-ai", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("typing")?.remove();
+    typingSound.pause();
+    typingSound.currentTime = 0;
+
+   const formattedReply = marked.parse(data.reply);
+chat.innerHTML += `<div class="ai-msg"><b>🤖 AI:</b><br>${formattedReply}</div>`;
+
+  } catch (err) {
+    document.getElementById("typing")?.remove();
+    typingSound.pause();
+    chat.innerHTML += `<div class="ai-msg" style="color:red;">AI Error</div>`;
+  }
+
+  chat.scrollTop = chat.scrollHeight;
+}
+function toggleMaximize() {
+  const box = document.getElementById("ai-chatbox");
+  const btn = document.getElementById("maximize-btn");
+
+  box.classList.toggle("maximized");
+
+  if (box.classList.contains("maximized")) {
+    btn.innerHTML = "🗗"; // minimize icon
+  } else {
+    btn.innerHTML = "⛶"; // maximize icon
+  }
+}
+
+// Enter key support
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById("user-input");
+  if (input) {
+    input.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  }
+});
+  // text type
+  new Typed("#typed-title", {
+    strings: ["📚 Our Notes Collection"],
+    typeSpeed: 50,
+    showCursor: false
+  });
+
+  new Typed("#typed-subtitle", {
+    strings: ["Curated study materials shared by students"],
+    typeSpeed: 30,
+    showCursor: false,
+    startDelay: 1200
+  });
+  const counters = document.querySelectorAll('.counter');
+
+counters.forEach(counter => {
+  const target = parseFloat(counter.getAttribute('data-target'));
+  let count = 0;
+
+  const step = target / 80; // smooth animation
+
+  const updateCounter = () => {
+    if (count < target) {
+      count += step;
+      counter.innerText = parseFloat(count).toFixed(1);
+      requestAnimationFrame(updateCounter);
+    } else {
+      counter.innerText = target; // final value exact
+    }
+  };
+
+  updateCounter();
+});
+
+async function updateLeaderboard() {
+  try {
+    const res = await fetch("/api/leaderboard");
+    const data = await res.json();
+
+    const list = document.getElementById("leaderboard-list");
+
+    list.innerHTML = data.map((user, index) => `
+      <div class="leader-row">
+        <span class="rank">#${index + 1}</span>
+        <div class="user-info">
+          <h4>👤 ${user._id}</h4>
+          <p>⬇ ${user.totalDownloads || 0} downloads</p>
+          <p>⭐ ${user.avgRating ? user.avgRating.toFixed(1) : "0.0"}</p>
+        </div>
+      </div>
+    `).join("");
+
+  } catch (err) {
+    console.error("Leaderboard error", err);
+  }
+}
+
+// Auto refresh leaderboard every 5 seconds
+setInterval(updateLeaderboard, 5000);
+updateLeaderboard();
+
+function toggleMenu() {
+  document.querySelector(".nav-links").classList.toggle("show");
+}
+document.addEventListener("DOMContentLoaded", function () {
+  const counters = document.querySelectorAll(".counter");
+
+  counters.forEach(counter => {
+    const target = parseFloat(counter.getAttribute("data-target"));
+    let value = 0;
+
+    const isDecimal = target % 1 !== 0;
+    const step = target / 100; // smooth animation
+
+    function update() {
+      if (value < target) {
+        value += step;
+        counter.textContent = isDecimal ? value.toFixed(1) : Math.floor(value);
+        requestAnimationFrame(update);
+      } else {
+        counter.textContent = isDecimal ? target.toFixed(1) : target;
+      }
+    }
+
+    update();
+  });
+});
+
+</script>
+
+</body>
+</html>

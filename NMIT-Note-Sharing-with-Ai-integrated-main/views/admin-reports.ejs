@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Reports</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #020617, #1e3a8a, #312e81);
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      padding: 30px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 32px;
+    }
+    .section {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+    }
+    h2 {
+      margin-bottom: 15px;
+      border-left: 5px solid #6366f1;
+      padding-left: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table th, table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    table th {
+      text-align: left;
+      background: rgba(255,255,255,0.15);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>📊 Admin Reports</h1>
+
+  <div class="section">
+    <h2>⭐ Top Rated Notes</h2>
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Subject</th>
+        <th>Uploader</th>
+        <th>Rating</th>
+      </tr>
+
+      <% topRated.forEach(note => { %>
+        <tr>
+          <td><%= note.title %></td>
+          <td><%= note.subject %></td>
+          <td><%= note.uploadedBy %></td>
+          <td><%= note.rating.toFixed(1) %></td>
+        </tr>
+      <% }) %>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>⬇️ Most Downloaded Notes</h2>
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Subject</th>
+        <th>Uploader</th>
+        <th>Downloads</th>
+      </tr>
+
+      <% mostDownloaded.forEach(note => { %>
+        <tr>
+          <td><%= note.title %></td>
+          <td><%= note.subject %></td>
+          <td><%= note.uploadedBy %></td>
+          <td><%= note.downloads %></td>
+        </tr>
+      <% }) %>
+    </table>
+  </div>
+
+</div>
+
+</body>
+</html>

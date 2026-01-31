@@ -1,0 +1,14 @@
+<h1>🔍 Search Notes</h1>
+
+<form method="GET" action="/admin/search">
+  <input type="text" name="q" placeholder="Search notes..." value="<%= q %>" style="padding:10px;width:300px;">
+  <button class="btn">Search</button>
+</form>
+
+<% notes.forEach(note => { %>
+  <div class="note-card">
+    <h3><%= note.title %></h3>
+    <p>Subject: <%= note.subject %></p>
+    <p>Uploader: <%= note.uploadedBy %></p>
+  </div>
+<% }) %>

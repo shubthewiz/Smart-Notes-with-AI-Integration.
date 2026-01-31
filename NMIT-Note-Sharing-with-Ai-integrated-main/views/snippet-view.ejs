@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shared Code</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body style="background:#020617;color:white;font-family:Poppins;padding:20px;">
+  <h2>📄 Shared Snippet</h2>
+  <p><b>Name:</b> <%= snippet.name || "Untitled" %></p>
+  <p><b>Language:</b> <%= snippet.language %></p>
+
+  <pre style="background:black;padding:15px;border-radius:12px;white-space:pre-wrap;">
+<%= snippet.code %>
+  </pre>
+
+  <a href="/playground" style="color:#22c55e;">← Back to Playground</a>
+</body>
+</html>

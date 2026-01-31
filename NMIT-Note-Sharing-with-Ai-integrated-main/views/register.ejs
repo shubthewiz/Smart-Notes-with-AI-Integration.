@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(-45deg, #667eea, #764ba2, #6a11cb, #2575fc);
+        background-size: 400% 400%;
+        animation: gradientBG 10s ease infinite;
+        overflow: hidden;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Floating circles */
+      .bubbles span {
+        position: absolute;
+        bottom: -120px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        animation: bubble 15s linear infinite;
+      }
+
+      .bubbles span:nth-child(1) {
+        left: 10%;
+        animation-duration: 12s;
+      }
+      .bubbles span:nth-child(2) {
+        left: 30%;
+        animation-duration: 18s;
+        width: 60px;
+        height: 60px;
+      }
+      .bubbles span:nth-child(3) {
+        left: 50%;
+        animation-duration: 10s;
+      }
+      .bubbles span:nth-child(4) {
+        left: 70%;
+        animation-duration: 16s;
+        width: 80px;
+        height: 80px;
+      }
+      .bubbles span:nth-child(5) {
+        left: 90%;
+        animation-duration: 13s;
+      }
+
+      @keyframes bubble {
+        0% {
+          transform: translateY(0);
+          opacity: 0;
+        }
+        50% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(-120vh);
+          opacity: 0;
+        }
+      }
+
+      /* Card */
+      .register-box {
+        width: 400px;
+        padding: 45px 35px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(12px);
+        border-radius: 25px;
+        box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        position: relative;
+        z-index: 10;
+        animation: pop 0.8s ease;
+      }
+
+      @keyframes pop {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      h2 {
+        color: white;
+        margin-bottom: 20px;
+        font-size: 28px;
+      }
+
+      p {
+        color: #e5e7eb;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      input {
+        width: 100%;
+        padding: 13px 18px;
+        margin: 10px 0;
+        border-radius: 30px;
+        border: none;
+        font-size: 14px;
+        outline: none;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      button {
+        width: 100%;
+        padding: 13px;
+        margin-top: 15px;
+        border: none;
+        border-radius: 30px;
+        background: #fff;
+        color: #6a11cb;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s ease;
+      }
+
+      button:hover {
+        background: #6a11cb;
+        color: white;
+        transform: scale(1.03);
+      }
+
+      a {
+        color: #fff;
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      /* Cartoon Avatar */
+      .avatar {
+        width: 110px;
+        position: absolute;
+        top: -65px;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(-50%, 0);
+        }
+        50% {
+          transform: translate(-50%, -10px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Background bubbles -->
+    <div class="bubbles">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <!-- Register Card -->
+    <div class="register-box">
+      <!-- Cartoon Image -->
+
+      <h2>Create Account ✨</h2>
+      <p>Join us and start sharing your notes</p>
+      <% if (error) { %>
+      <div
+        style="
+          background: #fee2e2;
+          color: #b91c1c;
+          padding: 12px;
+          border-radius: 10px;
+          margin-bottom: 15px;
+        "
+      >
+        <%= error %>
+      </div>
+      <% } %>
+
+      <form method="POST" action="/register">
+        <input type="text" name="name" placeholder="Full Name" required />
+        <input type="email" name="email" placeholder="Email Address" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Create Password"
+          required
+        />
+
+        <button type="submit">Register</button>
+      </form>
+
+      <p style="margin-top: 18px">
+        Already have an account? <a href="/login">Login</a>
+      </p>
+    </div>
+  </body>
+</html>

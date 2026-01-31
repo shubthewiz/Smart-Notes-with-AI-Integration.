@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Code Playground</title>
+
+  <!-- Monaco Loader -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Poppins, sans-serif;
+      background: #0f172a;
+      color: white;
+    }
+
+    .top-bar {
+      display: flex;
+      gap: 10px;
+      padding: 15px;
+      background: #020617;
+      align-items: center;
+    }
+
+    select, input, button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      outline: none;
+    }
+
+    button {
+      background: #22c55e;
+      color: black;
+      cursor: pointer;
+    }
+
+    #editor {
+      height: 60vh;
+      border-top: 1px solid #1e293b;
+    }
+
+    .output {
+      padding: 15px;
+      background: black;
+      height: 25vh;
+      overflow: auto;
+      font-family: monospace;
+      border-top: 1px solid #1e293b;
+      color: #22c55e;
+    }
+  #home-btn {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background-color: #2563eb;
+  display: inline-block;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#home-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+  </style>
+</head>
+<body>
+  
+
+<div class="top-bar">
+ <a href="/" id="home-btn">🏠 Home</a>
+
+  
+  <select id="language">
+    <option value="python">Python</option>
+    <option value="javascript">JavaScript</option>
+    <option value="java">Java</option>
+    <option value="c">C</option>
+  </select>
+
+  <input id="title" placeholder="Enter code title...">
+
+  <button onclick="saveCode()">💾 Save</button>
+  <button onclick="runCode()">▶ Run</button>
+  <button onclick="shareCode()">📤 Share</button>
+
+  <a href="/my-codes" style="color:#22c55e;margin-left:auto;">💾 My Codes</a>
+</div>
+
+<div id="editor"></div>
+<div class="output" id="output">Output will appear here...</div>
+
+<!-- ✅ SAFELY SEND SERVER DATA TO JS -->
+<script>
+  window.serverData = <%- JSON.stringify(code || {}) %>;
+</script>
+
+<script>
+let editor;
+let currentLanguage = "python";
+
+const snippets = {
+  python: `print("Hello World")`,
+  javascript: `console.log("Hello World")`,
+  java: `class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello World");
+  }
+}`,
+  c: `#include <stdio.h>
+int main() {
+  printf("Hello World");
+  return 0;
+}`
+};
+
+require.config({
+  paths: {
+    vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
+  }
+});
+
+require(["vs/editor/editor.main"], function () {
+
+  // ✅ Load language if editing saved code
+  if (window.serverData.language) {
+    currentLanguage = window.serverData.language;
+    document.getElementById("language").value = currentLanguage;
+  }
+
+  // ✅ Create editor
+  editor = monaco.editor.create(document.getElementById("editor"), {
+    value: snippets[currentLanguage],
+    language: currentLanguage,
+    theme: "vs-dark",
+    automaticLayout: true
+  });
+
+  // ✅ Load saved title
+  if (window.serverData.title) {
+    document.getElementById("title").value = window.serverData.title;
+  }
+
+  // ✅ Load saved code safely
+  if (window.serverData.code) {
+    editor.setValue(window.serverData.code);
+  }
+});
+
+// ✅ Language Change
+document.getElementById("language").addEventListener("change", () => {
+  const lang = document.getElementById("language").value;
+  currentLanguage = lang;
+  monaco.editor.setModelLanguage(editor.getModel(), lang);
+  editor.setValue(snippets[lang]);
+});
+
+// ✅ Run Code
+async function runCode() {
+  const code = editor.getValue();
+  const output = document.getElementById("output");
+
+  output.innerText = "Running...";
+
+  const languageMap = {
+    python: 71,
+    javascript: 63,
+    java: 62,
+    c: 50
+  };
+
+  try {
+    const res = await fetch("https://ce.judge0.com/submissions?wait=true", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        source_code: code,
+        language_id: languageMap[currentLanguage]
+      })
+    });
+
+    const data = await res.json();
+    output.innerText =
+      data.stdout || data.stderr || data.compile_output || "No output";
+  } catch (err) {
+    output.innerText = "Execution failed";
+  }
+}
+
+// ✅ Save Code
+async function saveCode() {
+  const title = document.getElementById("title").value;
+  const code = editor.getValue();
+
+  if (!title) return alert("Enter a title");
+
+  const res = await fetch("/save-code", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title,
+      language: currentLanguage,
+      code
+    })
+  });
+
+  const data = await res.json();
+  if (data.success) {
+    alert("✅ Code saved successfully");
+  }
+}
+
+// ✅ Share
+function shareCode() {
+  const code = encodeURIComponent(editor.getValue());
+
+  window.open(`https://wa.me/?text=${code}`, "_blank");
+  window.open(`https://mail.google.com/mail/?view=cm&fs=1&body=${code}`, "_blank");
+}
+</script>
+
+</body>
+</html>

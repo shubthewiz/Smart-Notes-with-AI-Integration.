@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a, #312e81);
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 34px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .note-card {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      border-left: 5px solid #6366f1;
+      transition: 0.3s;
+    }
+
+    .note-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+    }
+
+    .note-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .note-subject {
+      font-size: 15px;
+      opacity: 0.8;
+    }
+
+    .note-meta {
+      margin-top: 10px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .actions {
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .remove {
+      background: #ef4444;
+      color: white;
+    }
+
+    .remove:hover {
+      background: #dc2626;
+    }
+
+    /* No notes styling */
+    .empty-box {
+      text-align: center;
+      margin-top: 40px;
+      opacity: 0.8;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>📑 Admin – Manage Notes</h1>
+
+<% let hasNotes = false; %>
+
+<% notes.forEach(note => { %>
+  <% if (!note.removed) { hasNotes = true; %>
+
+    <div class="note-card">
+
+      <div class="note-title"><%= note.title %></div>
+      <div class="note-subject">📘 Subject: <%= note.subject %></div>
+
+      <div class="note-meta">
+        👤 Uploaded By: <%= note.uploadedBy %><br>
+        📅 Uploaded On: <%= note.createdAt.toDateString() %><br>
+        ⭐ Rating: <%= note.rating.toFixed(1) %>  
+      </div>
+
+      <div class="actions">
+        <form method="POST" action="/admin/remove/<%= note._id %>">
+          <button class="remove" onclick="return confirm('Are you sure you want to remove this note?')">
+            Remove Note
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+  <% } %>
+<% }) %>
+
+<% if (!hasNotes) { %>
+  <div class="empty-box">🎉 No notes available to manage.</div>
+<% } %>
+
+</body>
+</html>

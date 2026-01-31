@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>All Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"/>
+
+    <style>
+      * {
+        font-family: "Poppins", sans-serif;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+        background: #020617;
+        padding: 20px;
+      }
+
+      /* ✅ Animated Background */
+      .animated-bg {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(120deg, #020617, #1e3a8a, #312e81);
+        background-size: 300% 300%;
+        animation: gradientShift 14s ease infinite;
+        z-index: -3;
+      }
+
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      /* ✅ Title Animation */
+      .title-box {
+        text-align: center;
+        margin: 30px 0 40px 0;
+        animation: fadeInDown 1s ease;
+      }
+
+      @keyframes fadeInDown {
+        0% { opacity: 0; transform: translateY(-25px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      .animated-title {
+        font-size: 32px;
+        font-weight: 600;
+        color: white;
+        text-shadow: 0 0 15px rgba(99,102,241,0.6);
+        animation: glowText 1.5s ease-in-out infinite alternate;
+      }
+
+      @keyframes glowText {
+        from { text-shadow: 0 0 10px rgba(99,102,241,0.3); }
+        to { text-shadow: 0 0 28px rgba(99,102,241,0.8); }
+      }
+
+      /* Filter Bar */
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 20px;
+        background: white;
+        padding: 15px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      }
+
+      .filter-bar input, .filter-bar select {
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid #cbd5f5;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .filter-bar button {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      /* Notes Grid */
+      .notes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+      }
+
+      .note-card {
+        background: white;
+        border-radius: 20px;
+        padding: 14px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
+        transition: 0.3s ease;
+      }
+
+      .note-card:hover {
+        transform: translateY(-10px) scale(1.02);
+      }
+
+      .note-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 14px;
+      }
+
+      .btn {
+        display: inline-block;
+        margin-top: 10px;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      /* Stars */
+      .stars {
+        margin: 10px 0;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      .star {
+        color: #cbd5f5;
+        transition: 0.2s ease;
+      }
+
+      .star:hover {
+        color: gold;
+        transform: scale(1.2);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="animated-bg"></div>
+
+    <a href="/" style="
+      display:inline-block;margin-bottom:20px;padding:12px 26px;
+      background:linear-gradient(135deg, #2563eb, #1d4ed8);
+      color:#ffffff;text-decoration:none;border-radius:14px;
+      font-size:15px;font-weight:600;">
+      🏠 Back to Home Page
+    </a>
+
+    <!-- ✅ Animated Title -->
+    <div class="title-box">
+      <h2 class="animated-title">📚 Welcome to Notes Library</h2>
+      <p style="color:#c7d2fe;text-align:center;">
+        Search, filter and explore study materials
+      </p>
+    </div>
+
+    <!-- Filter -->
+    <form class="filter-bar" method="GET" action="/notes">
+      <input type="text" name="search" placeholder="🔍 Search by title"/>
+      <select name="subject">
+        <option value="all">📂 All Subjects</option>
+        <% subjects.forEach(sub => { %>
+        <option value="<%= sub %>"><%= sub %></option>
+        <% }) %>
+      </select>
+
+      <select name="sort">
+        <option value="newest">⭐ Newest First</option>
+        <option value="oldest">⏳ Oldest First</option>
+        <option value="rating">🔥 Highest Rated</option>
+      </select>
+
+      <button type="submit">Apply</button>
+    </form>
+
+    <!-- Notes Cards -->
+    <div class="notes-grid">
+      <% notes.forEach(note => { %>
+      <div class="note-card" data-uploader-id="<%= note.uploadedById || '' %>">
+        <img src="/uploads/<%= note.coverImage %>"/>
+        <h3><%= note.title %></h3>
+        <p>Subject: <%= note.subject %></p>
+        <p>By: <%= note.uploadedBy %></p>
+
+        <p>⭐ <span class="rating-value"><%= note.rating.toFixed(1) %></span> / 5</p>
+        <p>👥 <span class="rating-count"><%= note.ratingCount %></span> people rated</p>
+
+        <% if(user && note.uploadedById !== user._id.toString()) { %>
+        <div class="stars" data-id="<%= note._id %>">
+          <% for(let i = 1; i <= 5; i++) { %>
+          <span class="star">★</span>
+          <% } %>
+        </div>
+        <% } else if(!user) { %>
+        <p style="color:red;font-size:12px">Login to rate</p>
+        <% } %>
+
+        <a class="btn" href="/view/<%= note._id %>" target="_blank">View</a>
+        <a class="btn" href="/download/<%= note._id %>">Download</a>
+      </div>
+      <% }) %>
+    </div>
+
+    <!-- ✅ Rating JS -->
+    <script>
+      document.querySelectorAll(".note-card").forEach((card) => {
+        const starsBox = card.querySelector(".stars");
+        const stars = starsBox?.querySelectorAll(".star");
+        const uploaderId = card.dataset.uploaderId;
+        const currentUserId = "<%= user ? user._id : '' %>";
+
+        if (!stars || uploaderId === currentUserId) {
+          if (starsBox) starsBox.style.display = "none";
+          return;
+        }
+
+        stars.forEach((star, index) => {
+          star.addEventListener("click", async () => {
+            const noteId = starsBox.dataset.id;
+            const rating = index + 1;
+
+            const res = await fetch(`/rate/${noteId}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ rating })
+            });
+
+            const data = await res.json();
+
+            if (!data.success) return alert(data.message);
+
+            card.querySelector(".rating-value").textContent = data.rating;
+            card.querySelector(".rating-count").textContent = data.ratingCount;
+            stars.forEach(s => s.style.pointerEvents = "none");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

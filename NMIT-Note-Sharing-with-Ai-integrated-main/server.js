@@ -84,13 +84,17 @@ passport.use(
   )
 );
 
+let mongoErrorMsg = "No error";
+
 /* ---------- MongoDB ---------- */
 const connectDB = async () => {
   try {
     let mongoURI = process.env.MONGO_URI;
     if (!mongoURI) {
       console.log("⚠️ No MONGO_URI string found. Starting in-memory MongoDB fallback...");
-      const mongoServer = await MongoMemoryServer.create();
+      const mongoServer = await MongoMemoryServer.create({
+        instance: { port: 27017 } // fixed port or let it assign
+      });
       mongoURI = mongoServer.getUri();
       console.log(`✅ In-memory MongoDB started at: ${mongoURI}`);
     }
@@ -98,9 +102,14 @@ const connectDB = async () => {
     console.log("✅ MongoDB connected");
   } catch (err) {
     console.log("❌ Mongo error:", err);
+    mongoErrorMsg = String(err.message || err);
   }
 };
 connectDB();
+
+app.get("/debug", (req, res) => {
+  res.send(`Mongo Error: ${mongoErrorMsg}`);
+});
 
 /* ---------- Multer ---------- */
 const storage = multer.diskStorage({

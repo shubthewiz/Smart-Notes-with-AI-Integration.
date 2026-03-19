@@ -108,7 +108,7 @@ const seedDatabase = async () => {
                 uploadedBy: testUser.name,
                 uploadedById: testUser._id.toString(),
                 file: "demo_note.txt",
-                coverImage: "demo_note.txt",
+                coverImage: "https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
                 rating: 5,
                 ratingCount: 1,
                 downloads: 42

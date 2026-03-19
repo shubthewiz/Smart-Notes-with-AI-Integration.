@@ -190,7 +190,7 @@
     <div class="notes-grid">
       <% notes.forEach(note => { %>
       <div class="note-card" data-uploader-id="<%= note.uploadedById || '' %>">
-        <img src="/uploads/<%= note.coverImage %>"/>
+        <img src="<%= note.coverImage && note.coverImage.startsWith('http') ? note.coverImage : '/uploads/' + note.coverImage %>"/>
         <h3><%= note.title %></h3>
         <p>Subject: <%= note.subject %></p>
         <p>By: <%= note.uploadedBy %></p>

@@ -1213,7 +1213,7 @@ header {
           <div class="trending">🔥 Trending</div>
         <% } %>
 
-        <img class="note-img" src="/uploads/<%= note.coverImage %>">
+        <img class="note-img" src="<%= note.coverImage && note.coverImage.startsWith('http') ? note.coverImage : '/uploads/' + note.coverImage %>">
 
         <div class="note-body">
           <h3><%= note.title %></h3>

@@ -16,6 +16,7 @@ import dotenv from "dotenv";
 import Snippet from "./models/Snippet.js";
 import Code from "./models/Code.js";
 import Admin from "./models/Admin.js";
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 
 
@@ -40,7 +41,7 @@ app.set("view engine", "ejs");
 /* ---------- Session (ONLY ONCE) ---------- */
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'super-secret-default-key',
     resave: false,
     saveUninitialized: false
   })
@@ -57,8 +58,8 @@ passport.deserializeUser((obj, done) => done(null, obj));
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientID: process.env.GOOGLE_CLIENT_ID || 'dummy-client-id',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'dummy-client-secret',
 
       callbackURL: "/auth/google/callback"
     },
@@ -72,8 +73,8 @@ clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 passport.use(
   new FacebookStrategy(
     {
-      clientID: process.env.FACEBOOK_APP_ID,
-clientSecret: process.env.FACEBOOK_APP_SECRET,
+      clientID: process.env.FACEBOOK_APP_ID || 'dummy-fb-id',
+      clientSecret: process.env.FACEBOOK_APP_SECRET || 'dummy-fb-secret',
 
       callbackURL: "/auth/facebook/callback"
     },
@@ -84,9 +85,22 @@ clientSecret: process.env.FACEBOOK_APP_SECRET,
 );
 
 /* ---------- MongoDB ---------- */
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.log("❌ Mongo error:", err));
+const connectDB = async () => {
+  try {
+    let mongoURI = process.env.MONGO_URI;
+    if (!mongoURI) {
+      console.log("⚠️ No MONGO_URI string found. Starting in-memory MongoDB fallback...");
+      const mongoServer = await MongoMemoryServer.create();
+      mongoURI = mongoServer.getUri();
+      console.log(`✅ In-memory MongoDB started at: ${mongoURI}`);
+    }
+    await mongoose.connect(mongoURI);
+    console.log("✅ MongoDB connected");
+  } catch (err) {
+    console.log("❌ Mongo error:", err);
+  }
+};
+connectDB();
 
 /* ---------- Multer ---------- */
 const storage = multer.diskStorage({

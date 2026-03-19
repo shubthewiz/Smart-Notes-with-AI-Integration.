@@ -191,34 +191,37 @@ app.post("/ask-ai", async (req, res) => {
       return res.json({ reply: "Please type a message." });
     }
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [{ text: message }]
-            }
-          ]
-        })
+    if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'dummy-key') {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contents: [{ parts: [{ text: message }] }] })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!data.candidates) {
+        console.log("FULL API RESPONSE:", data);
+        return res.json({ reply: "No response from AI." });
       }
-    );
 
-    const data = await response.json();
-
-    if (!data.candidates) {
-      console.log("FULL API RESPONSE:", data);
-      return res.json({ reply: "No response from AI." });
+      const reply = data.candidates[0].content.parts[0].text;
+      return res.json({ reply });
+    } else {
+      // Fallback to Free Unauthenticated AI Model
+      const aiPrompt = encodeURIComponent(`You are a concise AI study assistant. Answer this query clearly: ${message}`);
+      const response = await fetch(`https://text.pollinations.ai/${aiPrompt}`);
+      if (!response.ok) throw new Error("Free AI service failed");
+      const reply = await response.text();
+      return res.json({ reply });
     }
-
-    const reply = data.candidates[0].content.parts[0].text;
-    res.json({ reply });
 
   } catch (error) {
     console.log("AI ERROR:", error);
-    res.json({ reply: "AI Error. Try again later." });
+    res.json({ reply: "AI Error. Both Gemini and Fallback Failed. Try again later." });
   }
 });
 //save page route

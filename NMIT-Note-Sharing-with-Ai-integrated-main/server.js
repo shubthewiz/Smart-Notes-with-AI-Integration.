@@ -25,7 +25,7 @@ dotenv.config();
 
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 /* ---------- Fix __dirname ---------- */
 const __filename = fileURLToPath(import.meta.url);
@@ -310,7 +310,7 @@ app.post("/snippet/save", async (req, res) => {
 
     await snippet.save();
 
-    const link = `http://localhost:3000/snippet/${snippet._id}`;
+    const link = `${req.protocol}://${req.get('host')}/snippet/${snippet._id}`;
     res.json({ success: true, link });
   } catch (err) {
     console.log("Snippet Save Error:", err);
